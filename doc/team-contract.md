@@ -54,5 +54,7 @@ Andrew Sarracini
 Karthiga Sethu Sethuramalingam       
 
 
+## Attributes
 
-Making Group Contracts | Centre for Teaching Excellence.” University of Waterloo, https://uwaterloo.ca/centre-for-teaching-excellence/catalogs/tip-sheets/making-group-contracts. Accessed 14 February 2024.
+Derived from the [UWaterloo_Group_Contracts](https://uwaterloo.ca/centre-for-teaching-excellence/catalogs/tip-sheets/making-group-contracts)
+
