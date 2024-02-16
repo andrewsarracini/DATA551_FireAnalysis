@@ -1,0 +1,2 @@
+The actual data source is a sqlite database. But due to it's huge size we extracted one datatable that we wanted and stored as csv.
+Even with csv the file size is still over the Git hub limit. So, I have compressed the raw csv file.
