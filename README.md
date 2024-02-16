@@ -33,4 +33,4 @@ This chart will depict the intensity of wildfires in terms of the area affected 
 
 ##### Sample sketch
 NOTE: This is subjected to change when we start working on the project.
-[!Image]("/dashboard_sketch.png")
+![Image](dashboard_sketch.png)
