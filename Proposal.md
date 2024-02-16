@@ -1,0 +1,17 @@
+## Context 
+
+
+Wildfires are a global phenomenon that lead to significant losses in infrastructure, culture, wildlife, vegetation, essential croplands... and even human lives. In 2018, the rampant wildfires that ravaged the state of California costs the US economy an estimated $148.5 *billion*; an unimmaginably large figure for a singular state in a singular year [SOURCE]. Given the enormous effect that wildfires have on the American people, our group decided to investigate historical trends in wildfire behaviour across the United States. Various entities that this project may benefit include:  
+- Government Agencies: Federal, state, and local government bodies responsible for wildfire management and policy-making can benefit from the dashboard. It provides them with historical insights into wildfire occurrences, trends, and policies, aiding in decision-making processes and resource allocation.
+ - Environmental Organizations: Groups advocating for sustainable wildfire management practices, conservation, and climate change mitigation can utilize the dashboard to illustrate the relationship between policy decisions, climate change, and wildfire frequency/intensity.
+- Researchers and Academia: Can identify patterns and conduct research to inform future strategies.
+- Emergency Response Organizations: Firefighters, emergency responders, and disaster management agencies can utilize the dashboard for situational awareness, understanding historical fire behavior, and planning for future incidents.
+
+This dashboard aims to provide historical data and insights regarding wildfires in the United States, offering a comprehensive resource for understanding past trends in wildfire behavior. By investigating the origin, frequency, size, at-risk areas, and cummulative destruction of wildfires, we hope to facilitate informed decision-making, policy formulation, and proactive measures to mitigate the impact of wildfires on ecosystems and communities.  
+
+## Content
+Our dataset was derived from Kaggle, an online platform dedicated to data science and machine learning. Through this website, we selected ![1.88 Million US Wildfires](https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires/data), which encompasses the frequency and severity of American wildfires from 2000-2009, which came in the form of a SQLite database. Initial preprocessing had our group establish a connection to this database, in order to transform the file into a more user-friendly .csv format. Our data contains 1,048,574 rows and 27 columns. All null and missing values were imputed via various appropriate techniques (mostly by removal), leaving our dataset clean and ready for exploratory data analysis (EDA). The data contains many columns, but most importantly involve `FIRE_YEAR`, (denotes the year in which the fire was discovered), `DISCOVERY_DATE` and `CONT_DATE` (the exact discovery and containment dates of the wildfire, respectively), `STAT_CAUSE_DESCR` (the cause of the wildfire), `FIRE_SIZE` and `FIRE_SIZE_CLASS` (the severity of the wildfire), `LATITUDE`,`LONGITUDE` and `STATE` (location tracking). 
+
+## Inspiration
+Our main reason for selecting this data is related to the challenges that the 2023 Okanagan wildfires brought upon the region, and the province of British Columbia as a whole. Our mission is to provide increased clarity on how wildfires begin, how they proliferate, and most importantly, the terrible damage that the flames leave in their wake. 
+
