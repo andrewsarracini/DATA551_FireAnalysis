@@ -11,7 +11,7 @@ This documents is a set of guidelines for contributing to our dashboard on GitHu
 
 ## Participation guidelines
 
-This project adheres to a [code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to abby@mozillafoundation.org.
+This project adheres to a [code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
 ## How to submit changes
 
