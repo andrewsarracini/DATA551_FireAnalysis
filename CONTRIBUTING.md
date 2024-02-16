@@ -30,3 +30,6 @@ This repository is currently maintained by [@andrewsarracini](https://github.com
 ## How to report bugs
 
 Notice a mistake? Please file any bugs, requests, or questions in [our issue tracker](https://github.com/andrewsarracini/issues)
+
+## Attribution 
+- Derived from the [Mozilla_Leadership_Contributing](https://github.com/mozilla/open-leadership-training-series/blob/gh-pages/CONTRIBUTING.md?plain=1)
