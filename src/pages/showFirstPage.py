@@ -4,7 +4,7 @@ import dash
 from dash import html, dcc, dash_table, Input, Output
 import plotly.express as px
 
-dash.register_page(__name__, path='/showFirstPage', name="Overview on WildFire")
+dash.register_page(__name__, path='/', name="Overview on WildFire")
 
 # Load data
 df = pd.read_csv("../data/processed/output.csv", low_memory=False)
