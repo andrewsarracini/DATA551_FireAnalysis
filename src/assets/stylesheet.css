@@ -2,13 +2,14 @@
 .count {
 font-size: 24px;
 padding: 20px;
-background-color: red;
+background-color: #000000;
 border-radius: 10px;
-box-shadow: 5px 5px 5px grey;
+/*box-shadow: 5px 5px 5px grey;*/
+color : white;
 }
 
 .heading {
-    background-color: #D80621;
+    background-color: #000000;
     padding: 10px;
     left: 0;
     color: white;
@@ -40,6 +41,7 @@ box-shadow: 5px 5px 5px grey;
     font-weight: bold;
     padding: 10px;
     font-size: 20px;
+    color: white;
 }
 
 .count-label {
@@ -47,6 +49,7 @@ box-shadow: 5px 5px 5px grey;
     padding: 10px;
     font-size: 20px;
     text-align :center;
+    color: white;
 }
 
 /* CSS for slider output */
@@ -56,7 +59,7 @@ box-shadow: 5px 5px 5px grey;
 
 /* CSS for sidebar */
 .sidebar {
-    background-color: #D80621;
+    background-color: #000000;
     padding: 5px;
     width: 15%;
     height: 100%;
@@ -77,10 +80,11 @@ box-shadow: 5px 5px 5px grey;
 .fire-size-info {
     max-height: 150px;
     overflow-y: auto;
+    color: white;
 }
 
 .shadow-style {
-    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);*/
     border-radius: 4px;
 }
 
@@ -113,7 +117,7 @@ height: 45%;
 width: 60%;
 margin-left: 18%;
 border-radius: 10px;
-box-shadow: 5px 5px 5px 5px grey;
+/*box-shadow: 5px 5px 5px 5px grey;*/
 }
 
 .countLabel{
@@ -143,4 +147,8 @@ height: 45%;
 width: 50%;
 margin-left: 1%;
 margin-top: 1%;
+}
+
+.layoutbackground{
+background-color: #151515
 }
