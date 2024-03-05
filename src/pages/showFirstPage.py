@@ -1,19 +1,14 @@
-from dash import Dash, dcc, html, Input, Output, callback
+from dash import Dash, html, Input, Output, callback
 import pandas as pd
 import dash
-from dash import html, dcc, dash_table, Input, Output
+from dash import html, dcc, Input, Output
 import plotly.express as px
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-import altair as alt
-import dash_vega_components as dvc
-import json
 
 dash.register_page(__name__, path='/', name="Overview on WildFire")
-# Load data
-#app = Dash(__name__)
 df = pd.read_csv("../data/processed/output.csv", low_memory=False)
-fire_data_grped = df.groupby(['STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].sum().reset_index()
+fire_data_grped = df.groupby(['STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
+fire_data_grped.rename(columns={'sum': 'FIRE_SIZE', 'count': 'TotalFireCount'}, inplace=True)
+
 # Options for filters
 states = sorted([{'label': state, 'value': state} for state in fire_data_grped['STATE'].unique()],
                 key=lambda x: x['label'])
@@ -121,7 +116,12 @@ def update_graph(year_range, selected_states, selected_sizes):
         dff = dff[dff['STATE'].isin(selected_states)]
     if 'All' not in selected_sizes:
         dff = dff[dff['FIRE_SIZE_CLASS'].isin(selected_sizes)]
+
     mapdata = dff.groupby(['STATE'])['FIRE_SIZE'].sum().reset_index()
+
+    count_area_data = dff[['FIRE_YEAR', 'FIRE_SIZE_CLASS', 'FIRE_SIZE','TotalFireCount']]
+    count_area_data = count_area_data.groupby(['FIRE_YEAR', 'FIRE_SIZE_CLASS']).agg({'FIRE_SIZE': 'sum', 'TotalFireCount': 'sum'}).reset_index()
+    count_area_data.rename(columns={'sum': 'TotalFireSize', 'count': 'TotalFireCount'}, inplace=True)
 
     fig = px.choropleth(
         data_frame=mapdata,
@@ -133,18 +133,15 @@ def update_graph(year_range, selected_states, selected_sizes):
         color_continuous_scale=px.colors.sequential.YlOrRd,
         template='plotly_dark'
     )
-
-    dff['FIRE_count'] = df.groupby(['FIRE_YEAR', 'STATE'])['FIRE_SIZE'].transform('count')
-
     color_scale = px.colors.sequential.YlOrRd
 
-    count_chart = px.area(dff, x='FIRE_YEAR', y='FIRE_count', line_shape='linear', color='STATE',
+    count_chart = px.area(count_area_data, x='FIRE_YEAR', y='TotalFireCount', line_shape='linear', color='FIRE_SIZE_CLASS',
                           color_discrete_sequence=color_scale, title='Count of Fires by Year and State', template='plotly_dark')
-    area_chart = px.area(dff, x='FIRE_YEAR', y='FIRE_SIZE', line_shape='linear', color='STATE',
+    area_chart = px.area(count_area_data, x='FIRE_YEAR', y='FIRE_SIZE', line_shape='linear',color='FIRE_SIZE_CLASS',
                          color_discrete_sequence=color_scale, title='Size of Fires by Year and State', template='plotly_dark')
 
     total_area = round(dff['FIRE_SIZE'].sum(), 3)
-    total_count = dff['FIRE_SIZE'].count()
+    total_count = dff['TotalFireCount'].sum()
 
     top10_grouped = dff.groupby('STATE')['FIRE_SIZE'].sum().reset_index()
     top10 = top10_grouped.head(10)
