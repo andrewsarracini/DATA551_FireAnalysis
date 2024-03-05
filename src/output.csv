@@ -1,0 +1,22 @@
+﻿FIRE_YEAR,DISCOVERY_DATE,DISCOVERY_DOY,DISCOVERY_TIME,STAT_CAUSE_DESCR,FIRE_SIZE,FIRE_SIZE_CLASS,LATITUDE,LONGITUDE,STATE,state_descriptions,geographic_areas_code,geographic_areas_desc,CAUSES,MONTH
+2005,2453403.5,33,1300,Miscellaneous,0.1,A,40.03694444,-121.0058333,CA,California,CA,California,Undefined,Feb
+2004,2453137.5,133,845,Lightning,0.25,A,38.93305556,-120.4044444,CA,California,CA,California,Lightning,May
+2004,2453156.5,152,1921,Debris Burning,0.1,A,38.98416667,-120.7355556,CA,California,CA,California,Human,Jun
+2004,2453184.5,180,1600,Lightning,0.1,A,38.55916667,-119.9133333,CA,California,CA,California,Lightning,Jun
+2004,2453184.5,180,1600,Lightning,0.1,A,38.55916667,-119.9330556,CA,California,CA,California,Lightning,Jun
+2004,2453186.5,182,1800,Lightning,0.1,A,38.63527778,-120.1036111,CA,California,CA,California,Lightning,Jul
+2004,2453187.5,183,1800,Lightning,0.1,A,38.68833333,-120.1533333,CA,California,CA,California,Lightning,Jul
+2005,2453437.5,67,1300,Debris Burning,0.8,B,40.96805556,-122.4338889,CA,California,CA,California,Human,Mar
+2005,2453444.5,74,1200,Debris Burning,1,B,41.23361111,-122.2833333,CA,California,CA,California,Human,Mar
+2004,2453187.5,183,1800,Lightning,0.1,A,38.54833333,-120.1491667,CA,California,CA,California,Lightning,Jul
+2004,2453188.5,184,1830,Lightning,0.1,A,38.69166667,-120.1597222,CA,California,CA,California,Lightning,Jul
+2004,2453188.5,184,1730,Lightning,0.1,A,38.5275,-120.1061111,CA,California,CA,California,Lightning,Jul
+2004,2453251.5,247,1600,Miscellaneous,0.1,A,38.78666667,-120.1933333,CA,California,CA,California,Undefined,Sep
+2004,2453276.5,272,1200,Campfire,6,B,38.43333333,-120.51,CA,California,CA,California,Human,Sep
+2004,2453281.5,277,630,Lightning,0.2,A,38.67583333,-120.2797222,CA,California,CA,California,Lightning,Oct
+2004,2453281.5,277,930,Lightning,0.1,A,38.56416667,-120.5422222,CA,California,CA,California,Lightning,Oct
+2004,2453284.5,280,1415,Equipment Use,16823,G,38.52333333,-120.2116667,CA,California,CA,California,Human,Oct
+2004,2453291.5,287,1618,Equipment Use,7700,G,38.78,-120.26,CA,California,CA,California,Human,Oct
+2004,2453329.5,325,2000,Debris Burning,0.1,A,38.945,-120.4116667,CA,California,CA,California,Human,Nov
+2004,2453160.5,156,1030,Lightning,0.1,A,33.44083333,-105.7205556,NM,New Mexico,SW,Southwest,Lightning,Jun
+2004,2453175.5,171,1530,Lightning,0.1,A,33.30722222,-105.6286111,NM,New Mexico,SW,Southwest,Lightning,Jun
