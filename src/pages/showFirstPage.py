@@ -20,8 +20,13 @@ states = sorted([{'label': state, 'value': state} for state in fire_data_grped['
 fireSize = sorted([{'label': size, 'value': size} for size in fire_data_grped['FIRE_SIZE_CLASS'].unique()],
                   key=lambda x: x['label'])
 
-default_state = 'AK'
-default_fire_size = 'A'
+all_dict = {"label": "All", "value": "All"}
+states.insert(0, all_dict)
+fireSize.insert(0, all_dict)
+
+default_state = 'All'
+default_fire_size = 'All'
+
 # Define layout
 layout = html.Div([
     # Filters sidebar
@@ -111,12 +116,15 @@ def update_graph(year_range, selected_states, selected_sizes):
     min_year, max_year = year_range
     slider_output = dcc.Markdown(f'Selected years: {min_year} - {max_year}')
     dff = fire_data_grped.copy()
-    dff = dff[
-        (dff['FIRE_YEAR'] >= year_range[0]) & (dff['FIRE_YEAR'] <= year_range[1]) &
-        (dff['STATE'].isin(selected_states)) &
-        (dff['FIRE_SIZE_CLASS'].isin(selected_sizes))]
+    dff = dff[(dff['FIRE_YEAR'] >= year_range[0]) & (dff['FIRE_YEAR'] <= year_range[1])]
+    if 'All' not in selected_states:
+        dff = dff[dff['STATE'].isin(selected_states)]
+    if 'All' not in selected_sizes:
+        dff = dff[dff['FIRE_SIZE_CLASS'].isin(selected_sizes)]
+    mapdata = dff.groupby(['STATE'])['FIRE_SIZE'].sum().reset_index()
+
     fig = px.choropleth(
-        data_frame=dff,
+        data_frame=mapdata,
         locationmode='USA-states',
         locations='STATE',
         scope="usa",
@@ -165,6 +173,4 @@ def update_graph(year_range, selected_states, selected_sizes):
         showlegend=False,
         coloraxis_showscale=False
     )
-    print(dff)
-
     return slider_output, fig, count_chart, area_chart, total_area, total_count, barPlot
