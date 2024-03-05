@@ -12,7 +12,7 @@ import json
 dash.register_page(__name__, path='/', name="Overview on WildFire")
 # Load data
 #app = Dash(__name__)
-df = pd.read_csv("../data/processed/output.csv", low_memory=False)
+df = pd.read_csv("../src/output.csv", low_memory=False)
 fire_data_grped = df.groupby(['STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].sum().reset_index()
 # Options for filters
 states = sorted([{'label': state, 'value': state} for state in fire_data_grped['STATE'].unique()],
