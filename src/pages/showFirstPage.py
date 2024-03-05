@@ -3,21 +3,25 @@ import pandas as pd
 import dash
 from dash import html, dcc, dash_table, Input, Output
 import plotly.express as px
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+import altair as alt
+import dash_vega_components as dvc
+import json
 
 dash.register_page(__name__, path='/', name="Overview on WildFire")
-
 # Load data
+#app = Dash(__name__)
 df = pd.read_csv("../data/processed/output.csv", low_memory=False)
 fire_data_grped = df.groupby(['STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].sum().reset_index()
-
 # Options for filters
 states = sorted([{'label': state, 'value': state} for state in fire_data_grped['STATE'].unique()],
                 key=lambda x: x['label'])
 fireSize = sorted([{'label': size, 'value': size} for size in fire_data_grped['FIRE_SIZE_CLASS'].unique()],
                   key=lambda x: x['label'])
+
 default_state = 'AK'
 default_fire_size = 'A'
-
 # Define layout
 layout = html.Div([
     # Filters sidebar
@@ -64,26 +68,25 @@ layout = html.Div([
             ], className='fire-size-info')
         ]),
     ], className="sidebar"),
-
     # Maps section
     html.Div([
         dcc.Graph(id='us_maps', figure={}, className="mapStyle"),
         html.Div([
             html.Div([
-            html.Div([
-                html.Div(id='total-area-damaged', className="count"),
-                html.Label('Total Area Damaged',className="count-label"),
-            ], className="countLabel"),
-            html.Div([
-                html.Div(id='total-wildfire-incidents',className="count"),
-                html.Label('Total Wildfire Incidents',className="count-label"),
-            ], className="countLabel")
-        ],className="Container"),
-            dcc.Graph(id='bar_plot',figure={},style={'height':'65%','margin-left':'10px'})
-            ])
+                html.Div([
+                    html.Div(id='total-area-damaged', className="count"),
+                    html.Label('Total Area Damaged', className="count-label"),
+                ], className="countLabel"),
+                html.Div([
+                    html.Div(id='total-wildfire-incidents', className="count"),
+                    html.Label('Total Wildfire Incidents', className="count-label"),
+                ], className="countLabel")
+            ], className="Container"),
+            dcc.Graph(id='bar_plot', figure={}, style={'height': '65%', 'margin-left': '10px'})
+        ])
         ,
-    ], className="Container"),  #, 'justify-content': 'space-between','margin-top': '20px', 'margin-left': '20px'
- # Charts section
+    ], className="Container"),  # , 'justify-content': 'space-between','margin-top': '20px', 'margin-left': '20px'
+    # Charts section
     html.Div([
         html.Br(),
         dcc.Graph(id='count-chart', className="chart_1"),
@@ -112,7 +115,6 @@ def update_graph(year_range, selected_states, selected_sizes):
         (dff['FIRE_YEAR'] >= year_range[0]) & (dff['FIRE_YEAR'] <= year_range[1]) &
         (dff['STATE'].isin(selected_states)) &
         (dff['FIRE_SIZE_CLASS'].isin(selected_sizes))]
-
     fig = px.choropleth(
         data_frame=dff,
         locationmode='USA-states',
@@ -122,13 +124,45 @@ def update_graph(year_range, selected_states, selected_sizes):
         hover_data=['STATE', 'FIRE_SIZE'],
         color_continuous_scale=px.colors.sequential.YlOrRd
     )
-    count_chart = px.histogram(dff, x='FIRE_YEAR', color='STATE', title='Count of Fires by Year and State')
-    area_chart = px.scatter(dff, x='FIRE_YEAR', y='FIRE_SIZE', color='STATE',
-                            title='Total Area Burned by Year and State')
-    total_area = round(dff['FIRE_SIZE'].sum(),3)
+
+    dff['FIRE_count'] = df.groupby(['FIRE_YEAR', 'STATE'])['FIRE_SIZE'].transform('count')
+
+    color_scale = px.colors.sequential.YlOrRd
+
+    count_chart = px.area(dff, x='FIRE_YEAR', y='FIRE_count', line_shape='linear', color='STATE',
+                          color_discrete_sequence=color_scale, title='Count of Fires by Year and State')
+    area_chart = px.area(dff, x='FIRE_YEAR', y='FIRE_SIZE', line_shape='linear', color='STATE',
+                         color_discrete_sequence=color_scale, title='Size of Fires by Year and State')
+
+    total_area = round(dff['FIRE_SIZE'].sum(), 3)
     total_count = dff['FIRE_SIZE'].count()
 
     top10_grouped = dff.groupby('STATE')['FIRE_SIZE'].sum().reset_index()
     top10 = top10_grouped.head(10)
-    barPlot = px.bar(top10, y='STATE', x='FIRE_SIZE')
-    return slider_output, fig, count_chart, area_chart,total_area,total_count,barPlot
+
+    top10_sorted = top10.sort_values(by='FIRE_SIZE', ascending=False)
+
+    color_scale = px.colors.sequential.YlOrRd
+
+    barPlot = px.bar(
+        top10_sorted,
+        y='STATE',
+        x='FIRE_SIZE',
+        color='FIRE_SIZE',
+        color_continuous_scale=color_scale,
+        labels={'FIRE_SIZE': 'Total Area Burned'},
+    )
+
+    barPlot.update_layout(
+        yaxis=dict(title=None),
+        title="Top10 Wildfire Damage States",
+    )
+
+    # Manually hiding the legend to save space
+    barPlot.update_layout(
+        showlegend=False,
+        coloraxis_showscale=False,
+    )
+    print(dff)
+
+    return slider_output, fig, count_chart, area_chart, total_area, total_count, barPlot
