@@ -122,7 +122,8 @@ def update_graph(year_range, selected_states, selected_sizes):
         scope="usa",
         color='FIRE_SIZE',
         hover_data=['STATE', 'FIRE_SIZE'],
-        color_continuous_scale=px.colors.sequential.YlOrRd
+        color_continuous_scale=px.colors.sequential.YlOrRd,
+        template='plotly_dark'
     )
 
     dff['FIRE_count'] = df.groupby(['FIRE_YEAR', 'STATE'])['FIRE_SIZE'].transform('count')
@@ -130,9 +131,9 @@ def update_graph(year_range, selected_states, selected_sizes):
     color_scale = px.colors.sequential.YlOrRd
 
     count_chart = px.area(dff, x='FIRE_YEAR', y='FIRE_count', line_shape='linear', color='STATE',
-                          color_discrete_sequence=color_scale, title='Count of Fires by Year and State')
+                          color_discrete_sequence=color_scale, title='Count of Fires by Year and State', template='plotly_dark')
     area_chart = px.area(dff, x='FIRE_YEAR', y='FIRE_SIZE', line_shape='linear', color='STATE',
-                         color_discrete_sequence=color_scale, title='Size of Fires by Year and State')
+                         color_discrete_sequence=color_scale, title='Size of Fires by Year and State', template='plotly_dark')
 
     total_area = round(dff['FIRE_SIZE'].sum(), 3)
     total_count = dff['FIRE_SIZE'].count()
@@ -151,17 +152,18 @@ def update_graph(year_range, selected_states, selected_sizes):
         color='FIRE_SIZE',
         color_continuous_scale=color_scale,
         labels={'FIRE_SIZE': 'Total Area Burned'},
+        template='plotly_dark'
     )
 
     barPlot.update_layout(
         yaxis=dict(title=None),
-        title="Top10 Wildfire Damage States",
+        title="Top10 Wildfire Damage States"
     )
 
     # Manually hiding the legend to save space
     barPlot.update_layout(
         showlegend=False,
-        coloraxis_showscale=False,
+        coloraxis_showscale=False
     )
     print(dff)
 
