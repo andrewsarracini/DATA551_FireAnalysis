@@ -56,7 +56,7 @@ layout = html.Div([
         ),
         html.Br(),
         html.Div([
-            html.Label('Information on Fire Size', className="sub-heading"),
+            html.Label('Information on Fire Size', className="filter-label"),
             html.Div([
                 html.P('A = 0 - 0.25 acres'),
                 html.P('B = 0.26-9.9 acres'),
