@@ -103,7 +103,11 @@ def create_altair_chart4(data):
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 # Options for filters (New version)
 states = sorted([{'label': state, 'value': state} for state in df['state_descriptions'].unique()], key=lambda x: x['label'])
-default_state = 'Alaska'
+all_dict = {"label": "All", "value": "All"}
+states.insert(0, all_dict)
+default_state = 'All'
+
+
 # Define layout
 layout = html.Div([
     # Main container for the entire layout
@@ -178,18 +182,18 @@ def update_altair_chart(year_range, selected_states):
     dff2 = causes_grouped.copy()
     dff3 = grouped_df.copy()
     dff4 = causes_grouped2.copy()
-    dff = wildfires_causes[
-        (wildfires_causes['FIRE_YEAR'] >= year_range[0]) & (wildfires_causes['FIRE_YEAR'] <= year_range[1]) &
-        (wildfires_causes['state_descriptions'].isin(selected_states))]
-    dff2 = causes_grouped[
-        (causes_grouped['FIRE_YEAR'] >= year_range[0]) & (causes_grouped['FIRE_YEAR'] <= year_range[1]) &
-        (causes_grouped['state_descriptions'].isin(selected_states))]
-    dff3 = grouped_df[
-        (grouped_df['FIRE_YEAR'] >= year_range[0]) & (grouped_df['FIRE_YEAR'] <= year_range[1]) &
-        (grouped_df['state_descriptions'].isin(selected_states))]
-    dff4 = causes_grouped2[
-        (causes_grouped2['FIRE_YEAR'] >= year_range[0]) & (causes_grouped2['FIRE_YEAR'] <= year_range[1]) &
-        (causes_grouped2['state_descriptions'].isin(selected_states))]
+
+    dff = wildfires_causes[(wildfires_causes['FIRE_YEAR'] >= year_range[0]) & (wildfires_causes['FIRE_YEAR'] <= year_range[1])]
+    dff2 = causes_grouped[(causes_grouped['FIRE_YEAR'] >= year_range[0]) & (causes_grouped['FIRE_YEAR'] <= year_range[1])]
+    dff3 = grouped_df[(grouped_df['FIRE_YEAR'] >= year_range[0]) & (grouped_df['FIRE_YEAR'] <= year_range[1])]
+    dff4 = causes_grouped2[(causes_grouped2['FIRE_YEAR'] >= year_range[0]) & (causes_grouped2['FIRE_YEAR'] <= year_range[1])]
+
+    if 'All' not in selected_states:
+        dff = dff[dff['state_descriptions'].isin(selected_states)]
+        dff2 = dff2[dff2['state_descriptions'].isin(selected_states)]
+        dff3 = dff3[dff3['state_descriptions'].isin(selected_states)]
+        dff4 = dff4[dff4['state_descriptions'].isin(selected_states)]
+
     updated_chart1 = create_altair_chart(dff)
     updated_chart2 = create_altair_chart2(dff2)
     updated_chart3 = create_altair_chart3(dff3)
