@@ -121,9 +121,11 @@ layout = html.Div([
                 max=df['FIRE_YEAR'].max(),
                 step=1,
                 value=[df['FIRE_YEAR'].min(), df['FIRE_YEAR'].max()],
-                marks={df['FIRE_YEAR'].min(): str(df['FIRE_YEAR'].min()),
-                       df['FIRE_YEAR'].max(): str(df['FIRE_YEAR'].max())}
+                marks={int(df['FIRE_YEAR'].min()): str(df['FIRE_YEAR'].min()),
+                       int(df['FIRE_YEAR'].max()): str(df['FIRE_YEAR'].max())}
             ),
+            html.Div(id='slider-output-container', className="slider-output"),
+            html.Br(),
             html.Div(id='slider-output-container-mi', className="slider-output"),
             html.Label('State', className="filter-label"),
             dcc.Dropdown(
@@ -170,7 +172,9 @@ layout = html.Div([
     ], className="Container")  # End of Main container
 ])
 @callback(
-    [Output('altair-chart-1', 'spec'),
+    [
+     Output('slider-output-container', 'children'),
+     Output('altair-chart-1', 'spec'),
      Output('altair-chart-2', 'spec'),
      Output('altair-chart-3', 'spec'),
      Output('altair-chart-4', 'spec')],
@@ -198,5 +202,5 @@ def update_altair_chart(year_range, selected_states):
     updated_chart2 = create_altair_chart2(dff2)
     updated_chart3 = create_altair_chart3(dff3)
     updated_chart4 = create_altair_chart4(dff4)
-    return updated_chart1, updated_chart2, updated_chart3, updated_chart4
-
+    slider_output = dcc.Markdown(f'Selected years: {year_range[0]} - {year_range[1]}')
+    return slider_output, updated_chart1, updated_chart2, updated_chart3, updated_chart4
