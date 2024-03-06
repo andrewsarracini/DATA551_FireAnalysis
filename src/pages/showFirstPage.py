@@ -9,6 +9,10 @@ df = pd.read_csv("../data/processed/output.csv", low_memory=False)
 fire_data_grped = df.groupby(['STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
 fire_data_grped.rename(columns={'sum': 'FIRE_SIZE', 'count': 'TotalFireCount'}, inplace=True)
 
+min_year = fire_data_grped['FIRE_YEAR'].min()
+max_year = fire_data_grped['FIRE_YEAR'].max()
+filter_mark = {int(min_year):str(min_year),int(max_year):str(max_year)}
+
 # Options for filters
 states = sorted([{'label': state, 'value': state} for state in fire_data_grped['STATE'].unique()],
                 key=lambda x: x['label'])
@@ -33,8 +37,7 @@ layout = html.Div([
             max=fire_data_grped['FIRE_YEAR'].max(),
             step=1,
             value=[fire_data_grped['FIRE_YEAR'].min(), fire_data_grped['FIRE_YEAR'].max()],
-            marks={fire_data_grped['FIRE_YEAR'].min(): str(fire_data_grped['FIRE_YEAR'].min()),
-                   fire_data_grped['FIRE_YEAR'].max(): str(fire_data_grped['FIRE_YEAR'].max())}
+            marks=filter_mark
         ),
         html.Div(id='slider-output-container-map', className="slider-output"),
         html.Label('State', className="filter-label"),
@@ -140,8 +143,9 @@ def update_graph(year_range, selected_states, selected_sizes):
     area_chart = px.area(count_area_data, x='FIRE_YEAR', y='FIRE_SIZE', line_shape='linear',color='FIRE_SIZE_CLASS',
                          color_discrete_sequence=color_scale, title='Size of Fires by Year and State', template='plotly_dark')
 
-    total_area = round(dff['FIRE_SIZE'].sum(), 3)
-    total_count = dff['TotalFireCount'].sum()
+    total_area = f"{round(dff['FIRE_SIZE'].sum(), 1):,}"
+    total_count = f"{round(dff['TotalFireCount'].sum(), 1):,}"
+    # total_count = dff['TotalFireCount'].sum()
 
     top10_grouped = dff.groupby('STATE')['FIRE_SIZE'].sum().reset_index()
     top10 = top10_grouped.head(10)
