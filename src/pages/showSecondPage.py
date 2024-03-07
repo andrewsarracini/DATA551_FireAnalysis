@@ -13,6 +13,12 @@ df = pd.read_csv("https://raw.githubusercontent.com/andrewsarracini/DATA551_Fire
 # df = pd.read_csv("../data/processed/output.csv", low_memory=False)
 alt.themes.enable('dark')
 wildfires_causes = df.groupby(['FIRE_YEAR', 'state_descriptions', 'FIRE_SIZE_CLASS', 'STAT_CAUSE_DESCR']).size().reset_index(name='COUNT')
+fireSize = sorted([{'label': size, 'value': size} for size in wildfires_causes['FIRE_SIZE_CLASS'].unique()],
+                  key=lambda x: x['label'])
+all_dict = {"label": "All", "value": "All"}
+fireSize.insert(0, all_dict)
+default_fire_size = 'All'
+
 # Function to create Altair chart
 def create_altair_chart(data):
     title = alt.TitleParams(
@@ -122,12 +128,10 @@ layout = html.Div([
                 max=df['FIRE_YEAR'].max(),
                 step=1,
                 value=[df['FIRE_YEAR'].min(), df['FIRE_YEAR'].max()],
-                marks={int(df['FIRE_YEAR'].min()): str(df['FIRE_YEAR'].min()),
-                       int(df['FIRE_YEAR'].max()): str(df['FIRE_YEAR'].max())}
+                marks={df['FIRE_YEAR'].min(): str(df['FIRE_YEAR'].min()),
+                       df['FIRE_YEAR'].max(): str(df['FIRE_YEAR'].max())}
             ),
             html.Div(id='slider-output-container', className="slider-output"),
-            html.Br(),
-            html.Div(id='slider-output-container-mi', className="slider-output"),
             html.Label('State', className="filter-label"),
             dcc.Dropdown(
                 id='state-dropdown',
@@ -136,6 +140,28 @@ layout = html.Div([
                 value=[default_state],
                 className="shadow-style"
             ),
+        html.Br(),
+        html.Label('Fire Size', className="filter-label"),
+        dcc.Dropdown(
+            id='size-class-dropdown',
+            options=fireSize,
+            multi=True,
+            value=[default_fire_size],
+            className="shadow-style"
+        ),
+        html.Br(),
+        html.Div([
+            html.Label('Fire Size Description', className="filter-label"),
+            html.Div([
+                html.P('A = 0 - 0.25 acres'),
+                html.P('B = 0.26-9.9 acres'),
+                html.P('C = 10.0-99.9 acres'),
+                html.P('D = 100-299 acres'),
+                html.P('E = 300 to 999 acres'),
+                html.P('F = 1000 to 4999 acres'),
+                html.P('G = 5000+ acres')
+            ], className='fire-size-info')
+        ]),
             #html.Button("SELECT ALL", id="select-all", n_clicks=0, style={'margin-top': '10px'}),
             html.Br()
         ], width=3, className="sidebar"),  # End of Filters sidebar
@@ -173,16 +199,16 @@ layout = html.Div([
     ], className="Container")  # End of Main container
 ])
 @callback(
-    [
-     Output('slider-output-container', 'children'),
-     Output('altair-chart-1', 'spec'),
+    [Output('slider-output-container', 'children'),
+    Output('altair-chart-1', 'spec'),
      Output('altair-chart-2', 'spec'),
      Output('altair-chart-3', 'spec'),
      Output('altair-chart-4', 'spec')],
     [Input('year-slider', 'value'),
-     Input('state-dropdown', 'value')]
+     Input('state-dropdown', 'value'),
+     Input('size-class-dropdown', 'value')]
 )
-def update_altair_chart(year_range, selected_states):
+def update_altair_chart(year_range, selected_states, selected_sizes):
     dff = wildfires_causes.copy()
     dff2 = causes_grouped.copy()
     dff3 = grouped_df.copy()
@@ -199,9 +225,16 @@ def update_altair_chart(year_range, selected_states):
         dff3 = dff3[dff3['state_descriptions'].isin(selected_states)]
         dff4 = dff4[dff4['state_descriptions'].isin(selected_states)]
 
+    if 'All' not in selected_sizes:
+        dff = dff[dff['FIRE_SIZE_CLASS'].isin(selected_states)]
+        dff2 = dff2[dff2['FIRE_SIZE_CLASS'].isin(selected_states)]
+        dff3 = dff3[dff3['FIRE_SIZE_CLASS'].isin(selected_states)]
+        dff4 = dff4[dff4['FIRE_SIZE_CLASS'].isin(selected_states)]
+
     updated_chart1 = create_altair_chart(dff)
     updated_chart2 = create_altair_chart2(dff2)
     updated_chart3 = create_altair_chart3(dff3)
     updated_chart4 = create_altair_chart4(dff4)
     slider_output = dcc.Markdown(f'Selected years: {year_range[0]} - {year_range[1]}')
     return slider_output, updated_chart1, updated_chart2, updated_chart3, updated_chart4
+

@@ -10,10 +10,6 @@ df = pd.read_csv("https://raw.githubusercontent.com/andrewsarracini/DATA551_Fire
 fire_data_grped = df.groupby(['STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
 fire_data_grped.rename(columns={'sum': 'FIRE_SIZE', 'count': 'TotalFireCount'}, inplace=True)
 
-min_year = fire_data_grped['FIRE_YEAR'].min()
-max_year = fire_data_grped['FIRE_YEAR'].max()
-filter_mark = {int(min_year):str(min_year),int(max_year):str(max_year)}
-
 # Options for filters
 states = sorted([{'label': state, 'value': state} for state in fire_data_grped['STATE'].unique()],
                 key=lambda x: x['label'])
@@ -38,7 +34,8 @@ layout = html.Div([
             max=fire_data_grped['FIRE_YEAR'].max(),
             step=1,
             value=[fire_data_grped['FIRE_YEAR'].min(), fire_data_grped['FIRE_YEAR'].max()],
-            marks=filter_mark
+            marks={fire_data_grped['FIRE_YEAR'].min(): str(fire_data_grped['FIRE_YEAR'].min()),
+                   fire_data_grped['FIRE_YEAR'].max(): str(fire_data_grped['FIRE_YEAR'].max())}
         ),
         html.Div(id='slider-output-container-map', className="slider-output"),
         html.Label('State', className="filter-label"),
@@ -60,15 +57,15 @@ layout = html.Div([
         ),
         html.Br(),
         html.Div([
-            html.Label('Information on Fire Size', className="filter-label"),
+            html.Label('Fire Size Description', className="filter-label"),
             html.Div([
-                html.P('A = 0 - 0.25 acres'),
-                html.P('B = 0.26-9.9 acres'),
-                html.P('C = 10.0-99.9 acres'),
-                html.P('D = 100-299 acres'),
-                html.P('E = 300 to 999 acres'),
-                html.P('F = 1000 to 4999 acres'),
-                html.P('G = 5000+ acres')
+                html.P('A = 0 - 0.25 acres (minimal)'),
+                html.P('B = 0.26-9.9 acres (minor)'),
+                html.P('C = 10.0-99.9 acres (low-moderate)'),
+                html.P('D = 100-299 acres (moderate)'),
+                html.P('E = 300 to 999 acres (high-moderate)'),
+                html.P('F = 1000 to 4999 acres (major)'),
+                html.P('G = 5000+ acres (extreme)')
             ], className='fire-size-info')
         ]),
     ], className="sidebar"),
@@ -134,19 +131,31 @@ def update_graph(year_range, selected_states, selected_sizes):
         scope="usa",
         color='FIRE_SIZE',
         hover_data=['STATE', 'FIRE_SIZE'],
-        color_continuous_scale=px.colors.sequential.YlOrRd,
+        color_continuous_scale= px.colors.sequential.YlOrRd,
         template='plotly_dark'
     )
     color_scale = px.colors.sequential.YlOrRd
 
-    count_chart = px.area(count_area_data, x='FIRE_YEAR', y='TotalFireCount', line_shape='linear', color='FIRE_SIZE_CLASS',
-                          color_discrete_sequence=color_scale, title='Count of Fires by Year and State', template='plotly_dark')
-    area_chart = px.area(count_area_data, x='FIRE_YEAR', y='FIRE_SIZE', line_shape='linear',color='FIRE_SIZE_CLASS',
-                         color_discrete_sequence=color_scale, title='Size of Fires by Year and State', template='plotly_dark')
+    count_chart = px.area(count_area_data, x='FIRE_YEAR', y='TotalFireCount', line_shape='linear',
+                          color='FIRE_SIZE_CLASS',
+                          color_discrete_sequence=color_scale, title='Annual Count of Wildfires',
+                          template='plotly_dark')
+    count_chart.update_layout(
+        xaxis_title='',
+        yaxis_title='Count of Wildfires',
+        legend_title_text="Fire Size Class"
+    )
+    area_chart = px.area(count_area_data, x='FIRE_YEAR', y='FIRE_SIZE', line_shape='linear', color='FIRE_SIZE_CLASS',
+                         color_discrete_sequence=color_scale, title='Annual Area Damaged by Wildfires',
+                         template='plotly_dark')
+    area_chart.update_layout(
+        xaxis_title='',
+        yaxis_title='Area Damaged (Acres)',
+        legend_title_text="Fire Size Class"
+    )
 
-    total_area = f"{round(dff['FIRE_SIZE'].sum(), 1):,}"
-    total_count = f"{round(dff['TotalFireCount'].sum(), 1):,}"
-    # total_count = dff['TotalFireCount'].sum()
+    total_area = round(dff['FIRE_SIZE'].sum(), 3)
+    total_count = dff['TotalFireCount'].sum()
 
     top10_grouped = dff.groupby('STATE')['FIRE_SIZE'].sum().reset_index()
     top10 = top10_grouped.head(10)
@@ -161,8 +170,10 @@ def update_graph(year_range, selected_states, selected_sizes):
         x='FIRE_SIZE',
         color='FIRE_SIZE',
         color_continuous_scale=color_scale,
-        labels={'FIRE_SIZE': 'Total Area Burned'},
-        template='plotly_dark'
+        labels={'FIRE_SIZE': 'Total Area Damaged (Acres)'},
+        template='plotly_dark',
+        #marker_opacity=0.3,
+        #marker_line_width=0
     )
 
     barPlot.update_layout(
