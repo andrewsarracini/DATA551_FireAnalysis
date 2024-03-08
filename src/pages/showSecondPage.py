@@ -123,12 +123,12 @@ layout = html.Div([
             html.Label('Fire Year', className="filter-label"),
             dcc.RangeSlider(
                 id='year-slider',
-                min=df['FIRE_YEAR'].min(),
-                max=df['FIRE_YEAR'].max(),
+                min=int(df['FIRE_YEAR'].min()),
+                max=int(df['FIRE_YEAR'].max()),
                 step=1,
                 value=[df['FIRE_YEAR'].min(), df['FIRE_YEAR'].max()],
-                marks={df['FIRE_YEAR'].min(): str(df['FIRE_YEAR'].min()),
-                       df['FIRE_YEAR'].max(): str(df['FIRE_YEAR'].max())}
+                marks={int(df['FIRE_YEAR'].min()): str(df['FIRE_YEAR'].min()),
+                       int(df['FIRE_YEAR'].max()): str(df['FIRE_YEAR'].max())}
             ),
             html.Div(id='slider-output-container', className="slider-output"),
             html.Label('State', className="filter-label"),

@@ -29,12 +29,12 @@ layout = html.Div([
         html.Label('Fire Year', className="filter-label"),
         dcc.RangeSlider(
             id='year-slider',
-            min=fire_data_grped['FIRE_YEAR'].min(),
-            max=fire_data_grped['FIRE_YEAR'].max(),
+            min=int(fire_data_grped['FIRE_YEAR'].min()),
+            max=int(fire_data_grped['FIRE_YEAR'].max()),
             step=1,
             value=[fire_data_grped['FIRE_YEAR'].min(), fire_data_grped['FIRE_YEAR'].max()],
-            marks={fire_data_grped['FIRE_YEAR'].min(): str(fire_data_grped['FIRE_YEAR'].min()),
-                   fire_data_grped['FIRE_YEAR'].max(): str(fire_data_grped['FIRE_YEAR'].max())}
+            marks={int(fire_data_grped['FIRE_YEAR'].min()): str(fire_data_grped['FIRE_YEAR'].min()),
+                   int(fire_data_grped['FIRE_YEAR'].max()): str(fire_data_grped['FIRE_YEAR'].max())}
         ),
         html.Div(id='slider-output-container-map', className="slider-output"),
         html.Label('State', className="filter-label"),
