@@ -6,12 +6,17 @@ import plotly.express as px
 
 dash.register_page(__name__, path='/', name="Overview on WildFire")
 df = pd.read_csv("../data/processed/output.csv", low_memory=False)
-fire_data_grped = df.groupby(['STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
+fire_data_grped = df.groupby(['state_descriptions','STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
+#fire_data_grped.rename(columns={'state_descriptions':'STATE'},inplace=True)
 fire_data_grped.rename(columns={'sum': 'FIRE_SIZE', 'count': 'TotalFireCount'}, inplace=True)
 
 # Options for filters
-states = sorted([{'label': state, 'value': state} for state in fire_data_grped['STATE'].unique()],
-                key=lambda x: x['label'])
+# states = sorted([{'label': state, 'value': state} for state in fire_data_grped['STATE'].unique()],
+#                 key=lambda x: x['label'])
+states = sorted([
+    {'label': state_label, 'value': state_value}
+    for state_value,state_label in zip(fire_data_grped['STATE'].unique(), fire_data_grped['state_descriptions'].unique())
+], key=lambda x: x['label'])
 fireSize = sorted([{'label': size, 'value': size} for size in fire_data_grped['FIRE_SIZE_CLASS'].unique()],
                   key=lambda x: x['label'])
 
@@ -131,7 +136,8 @@ def update_graph(year_range, selected_states, selected_sizes):
         color='FIRE_SIZE',
         hover_data=['STATE', 'FIRE_SIZE'],
         color_continuous_scale= px.colors.sequential.YlOrRd,
-        template='plotly_dark'
+        template='plotly_dark',
+        labels={'FIRE_SIZE': 'Fire Size Class', 'STATE': 'State'}
     )
     color_scale = px.colors.sequential.YlOrRd
 
