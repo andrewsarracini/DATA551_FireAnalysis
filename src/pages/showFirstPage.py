@@ -5,9 +5,11 @@ from dash import html, dcc, Input, Output
 import plotly.express as px
 
 dash.register_page(__name__, path='/', name="Overview on WildFire")
-df = pd.read_csv("../data/processed/output.csv", low_memory=False)
+df = pd.read_csv("https://raw.githubusercontent.com/andrewsarracini/DATA551_FireAnalysis/main/data/processed/output.csv", low_memory=False)
+# df = pd.read_csv("../data/processed/output.csv", low_memory=False)
 fire_data_grped = df.groupby(['state_descriptions','STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
 #fire_data_grped.rename(columns={'state_descriptions':'STATE'},inplace=True)
+
 fire_data_grped.rename(columns={'sum': 'FIRE_SIZE', 'count': 'TotalFireCount'}, inplace=True)
 
 # Options for filters
