@@ -1,5 +1,4 @@
 from dash import Dash, html, dcc
-from dash.dependencies import Input, Output
 import dash
 import plotly.express as px
 
@@ -8,8 +7,12 @@ px.defaults.template = "ggplot2"
 app = Dash(__name__, pages_folder='pages', use_pages=True)
 server = app.server
 
+'''
+    This is the main layout where the call starts.
+    This holds the header chart and
+    helps showing link for registered dashboard pages    
+'''
 app.layout = html.Div([
-    #dcc.Location(id='url', refresh=False, pathname='/pages/showFirstPage.py'),  # Set initial pathname
     html.Br(),
     html.Div([
         html.P('HISTORICAL ANALYSIS OF WILDFIRES IN THE UNITED STATES', className="heading-text")
@@ -25,7 +28,7 @@ app.layout = html.Div([
         for page in dash.page_registry.values()
     ]),
     dash.page_container
-],className="layoutbackground")
+], className="layoutbackground")
 
 
 if __name__ == '__main__':

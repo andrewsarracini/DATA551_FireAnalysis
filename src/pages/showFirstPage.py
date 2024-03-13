@@ -4,20 +4,26 @@ import dash
 from dash import html, dcc, Input, Output
 import plotly.express as px
 
+'''
+Helps to register the page
+'''
 dash.register_page(__name__, path='/', name="Overview on WildFire")
-df = pd.read_csv("https://raw.githubusercontent.com/andrewsarracini/DATA551_FireAnalysis/main/data/processed/output.csv", low_memory=False)
-# df = pd.read_csv("../data/processed/output.csv", low_memory=False)
-fire_data_grped = df.groupby(['state_descriptions','STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
-#fire_data_grped.rename(columns={'state_descriptions':'STATE'},inplace=True)
 
+'''
+Helps to get the data. 
+Then, filters and groups the data according to the requirement 
+'''
+df = pd.read_csv("https://raw.githubusercontent.com/andrewsarracini/DATA551_FireAnalysis/main/data/processed/output.csv", low_memory=False)
+fire_data_grped = df.groupby(['state_descriptions','STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
 fire_data_grped.rename(columns={'sum': 'FIRE_SIZE', 'count': 'TotalFireCount'}, inplace=True)
 
-# Options for filters
-# states = sorted([{'label': state, 'value': state} for state in fire_data_grped['STATE'].unique()],
-#                 key=lambda x: x['label'])
+'''
+Collects the values for the filter. Sorts it so that user can easily scroll through it.
+Adds an 'All' button, so that the user can see the over view of wildfire on all states and of all sizes.
+'''
 states = sorted([
     {'label': state_label, 'value': state_value}
-    for state_value,state_label in zip(fire_data_grped['STATE'].unique(), fire_data_grped['state_descriptions'].unique())
+    for state_value, state_label in zip(fire_data_grped['STATE'].unique(), fire_data_grped['state_descriptions'].unique())
 ], key=lambda x: x['label'])
 fireSize = sorted([{'label': size, 'value': size} for size in fire_data_grped['FIRE_SIZE_CLASS'].unique()],
                   key=lambda x: x['label'])
@@ -29,6 +35,26 @@ fireSize.insert(0, all_dict)
 default_state = 'All'
 default_fire_size = 'All'
 
+'''
+Helps to design the layout.
+The layout has 2 main component, the filter components and the main page component.
+Those page components are further divided to fit filters and charts.
+It takes it's design form the css file in assets.
+Component description:
+Filter Division:
+    1. year-slider : responsible for showing year filter
+    2. slider-output-container-map : shows the user selected year range
+    3. state-dropdown : a multiselect combo box that shows all the states
+    4. size-class-dropdown : A multiselect combo box that shows all the Categorized fire sizes
+    5. Fire Size Description : A scrollable text bar that shows description about the fire sizes
+Main Division:
+    1. us_maps: helps to visualize how wild wife is spread acroos different staes in US
+    2. fire size countLabel: helps to give exact figure of total area damaged
+    3. fire occurance countLabel: helps to give exact figure of total wildfire incident 
+    4. top 10 bar plot chart : shows the top 10 area damaged by the wild fire.
+    5. count line chart : helps to visualize the total wildfire incident over the time
+    6. count area chart : helps to visualize the area burned by wildfire over the time
+'''
 # Define layout
 layout = html.Div([
     # Filters sidebar
@@ -101,7 +127,20 @@ layout = html.Div([
     ], className="Container")
 ])
 
-
+'''
+Helps to update the charts based on filter
+Input:
+ 1. selected years from year slider
+ 2. selected state from state-dropdown
+ 3. selected fire size from size-class-dropdown
+Output:
+ 1. us_maps
+ 2. fire size countLabel
+ 3. fire occurance countLabel
+ 4. top 10 bar plot chart 
+ 5. count line chart 
+ 6. count area chart 
+'''
 @callback(
     [Output('slider-output-container-map', 'children'),
      Output(component_id='us_maps', component_property='figure'),
@@ -115,6 +154,14 @@ layout = html.Div([
      Input('size-class-dropdown', 'value')]
 )
 def update_graph(year_range, selected_states, selected_sizes):
+    '''
+    Helsp to update teh chart based on the input fdat
+
+    :param year_range: list of selected years
+    :param selected_states: selected state
+    :param selected_sizes: selected fire size
+    :return: updated chart
+    '''
     min_year, max_year = year_range
     slider_output = dcc.Markdown(f'Selected years: {min_year} - {max_year}')
     dff = fire_data_grped.copy()
@@ -142,7 +189,9 @@ def update_graph(year_range, selected_states, selected_sizes):
         labels={'FIRE_SIZE': 'Fire Size Class', 'STATE': 'State'}
     )
     color_scale = px.colors.sequential.YlOrRd
-
+    '''
+    Helps to get and update  
+    '''
     count_chart = px.area(count_area_data, x='FIRE_YEAR', y='TotalFireCount', line_shape='linear',
                           color='FIRE_SIZE_CLASS',
                           color_discrete_sequence=color_scale, title='Annual Count of Wildfires',
@@ -152,6 +201,9 @@ def update_graph(year_range, selected_states, selected_sizes):
         yaxis_title='Count of Wildfires',
         legend_title_text="Fire Size Class"
     )
+    '''
+    Helps to get and update area chart
+    '''
     area_chart = px.area(count_area_data, x='FIRE_YEAR', y='FIRE_SIZE', line_shape='linear', color='FIRE_SIZE_CLASS',
                          color_discrete_sequence=color_scale, title='Annual Area Damaged by Wildfires',
                          template='plotly_dark')
@@ -170,7 +222,9 @@ def update_graph(year_range, selected_states, selected_sizes):
     top10_sorted = top10.sort_values(by='FIRE_SIZE', ascending=False)
 
     color_scale = px.colors.sequential.YlOrRd
-
+    '''
+    Helps to add and update bar plot 
+    '''
     barPlot = px.bar(
         top10_sorted,
         y='STATE',
@@ -178,17 +232,12 @@ def update_graph(year_range, selected_states, selected_sizes):
         color='FIRE_SIZE',
         color_continuous_scale=color_scale,
         labels={'FIRE_SIZE': 'Total Area Damaged (Acres)'},
-        template='plotly_dark',
-        #marker_opacity=0.3,
-        #marker_line_width=0
+        template='plotly_dark'
     )
-
     barPlot.update_layout(
         yaxis=dict(title=None),
         title="Top10 Wildfire Damage States"
     )
-
-    # Manually hiding the legend to save space
     barPlot.update_layout(
         showlegend=False,
         coloraxis_showscale=False
