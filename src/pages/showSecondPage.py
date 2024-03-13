@@ -7,6 +7,9 @@ import dash_bootstrap_components as dbc
 import dash_vega_components as dvc
 
 alt.data_transformers.enable("vegafusion")
+'''
+Helps to register the page
+'''
 dash.register_page(__name__, path='/showSecondPage.py', name="Causes of WildFire")
 # Load data
 df = pd.read_csv("https://raw.githubusercontent.com/andrewsarracini/DATA551_FireAnalysis/main/data/processed/output.csv", low_memory=False)
@@ -18,6 +21,11 @@ fireSize = sorted([{'label': size, 'value': size} for size in df['FIRE_SIZE_CLAS
 # Personalized scales from yellow to red
 color_scale1 = alt.Scale(range=['#ffff00', '#ffd700', '#ffa500', '#d0320b', '#ff0000', '#8b0000', '#8b0000'])
 def create_altair_chart(data):
+    '''
+     Helps to visualize causes of wild fire in correlation with fire size
+    :param data: grouped data
+    :return: heat map
+    '''
     title = alt.TitleParams(
     text='Understanding Wildfires: Causes and Fire Size',
     color='white', fontSize=16)
@@ -42,6 +50,11 @@ color_scale = alt.Scale(domain=['Human','Lightning'], range=['#9D0400', '#FF9900
 
 causes_grouped = df[df['CAUSES'].isin(['Human', 'Lightning'])].groupby(['FIRE_YEAR', 'FIRE_SIZE_CLASS', 'state_descriptions', 'geographic_areas_desc', 'CAUSES']).size().reset_index(name='COUNT')
 def create_altair_chart2(data):
+    '''
+    Helps to visualize Regional Fire Pattern in relation to the proportion of fire
+    :param data: dataframe
+    :return: Returns bar chart
+    '''
     title2 = alt.TitleParams(
         text='Regional Fire Patterns: Proportion of Fires',
         color='white', fontSize=16)
@@ -71,6 +84,11 @@ sort_order = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct
 grouped_df['MONTH'] = pd.Categorical(grouped_df['MONTH'], categories=sort_order, ordered=True)
 grouped_df = grouped_df.sort_values(by='MONTH')
 def create_altair_chart3(data):
+    '''
+     Helps to visualize Comparing Monthly Fire Frequencies divided by natural (lightning) and unnatural (human) causes
+    :param data: data frame
+    :return: line chart
+    '''
     title3 = alt.TitleParams(
                 text='Comparing Monthly Fire Frequencies',
                 color='white', fontSize=16)
@@ -99,6 +117,11 @@ def create_altair_chart3(data):
 # Total acres burned
 causes_grouped2 = df[df['CAUSES'].isin(['Human', 'Lightning'])].groupby(['FIRE_YEAR', 'FIRE_SIZE_CLASS','state_descriptions', 'geographic_areas_desc', 'CAUSES'])['FIRE_SIZE'].sum().reset_index(name='SUM')
 def create_altair_chart4(data):
+    '''
+    Helps to visualize Regional Fire Patterns based on proportion of Acres Burned
+    :param data: dataframe
+    :return: bar chart
+    '''
     title4 = alt.TitleParams(
         text='Regional Fire Patterns: Proportion of Acres Burned',
         color='white', fontSize=16)
@@ -140,6 +163,24 @@ text = """ * Regions of the United States: The 52 states are grouped into 10 maj
 9. The Southern Area encompasses Arkansas, Texas, Florida, South Carolina, Louisiana, Oklahoma, Kansas, Missouri, Nebraska, Kentucky, Tennessee, Georgia, Alabama, Mississippi, and Puerto Rico. 10. Lastly, the Southwest region includes New Mexico and Arizona."""
 text2="""* Human Causes include Debris Burning, Campfire, Equipment Use, Arson, Children, Railroad, Smoking, Powerline, Structure, Fireworks"""
 
+'''
+Helps to design the layout.
+The layout has 2 main component, the filter components and the main page component.
+Those page components are further divided to fit filters and charts.
+It takes it's design form the css file in assets.
+Component description:
+Filter Division:
+    1. year-slider : responsible for showing year filter
+    2. slider-output-container-map : shows the user selected year range
+    3. state-dropdown : a multiselect combo box that shows all the states
+    4. size-class-dropdown : A multiselect combo box that shows all the Categorized fire sizes
+    5. Fire Size Description : A scrollable text bar that shows description about the fire sizes
+Main Division:
+    1. heat map
+    2. line chart
+    3. bar chart : proportion of wild fire incidences
+    4. bar chart : proportion of wild fire area
+'''
 # Define layout
 layout = html.Div([
     # Main container for the entire layout
@@ -246,6 +287,13 @@ layout = html.Div([
 )
 
 def update_altair_chart(year_range, selected_states, selected_sizes):
+    '''
+    Helps to update the charts
+    :param year_range: selected years as list
+    :param selected_states: selected state
+    :param selected_sizes: selected fire size
+    :return:
+    '''
     dff = wildfires_causes.copy()
     dff2 = causes_grouped.copy()
     dff3 = grouped_df.copy()
