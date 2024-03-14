@@ -31,8 +31,12 @@ This will explore the relationship between the total area affected by wildfires 
 ##### Area plot
 This chart will depict the intensity of wildfires in terms of the area affected over a specified time period. By visualizing the fluctuation in wildfire intensity over time, viewers can gain a better understanding of the historical trends and variations in wildfire activity.
 
-##### Sample sketch
-NOTES:
+##### Initial Sketch 
 - The map shown in the sketch corresponds to the python code in [map.py](https://github.com/andrewsarracini/DATA551_FireAnalysis/blob/main/map.py)
-- This is subjected to change when we start working on the project.
+- This is sketch is an early idea of how we envison our final product, preserved for posterity
 ![Image](dashboard_sketch.png)
+
+##### Final Dashboard Screenshots
+- Final Screenshots of our Dashboard
+![Image](FireAnalysis_Page1.png) 
+![Image](FireAnalysis_Page2.png) 
