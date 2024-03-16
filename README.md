@@ -3,18 +3,24 @@
 Wildfires are a global phenomenon that leads to significant losses not only costly in money but also in terms of vegetation and wildlife. The dashboard aims to provide historical data and insights regarding wildfires in the USA, offering a comprehensive resource for understanding past trends on wildfire behavior.
 
 Our dashboard focuses on answering the below questions:
-1. Which state is most affected by wildfires in terms of frequency and area consumed? 
-2. What are the most common causes of wildfires, both per state and across the country? 
-3. What are the top and bottom states in terms of fast and efficient containment of wildfires?
-4. Are there any mitigating or aggravating factors that are contributing to the result? 
-5. What factors might lead to faster containment of wildfires? 
+1. Are there any spacial cluster in wildfire incidents and how it is related to the size of the fire and Year of occurance?
+2. What is the total number of wildfire incidents in a range of year with particular size in particular state(s)?
+3. What is the total area affected by wildfire incidents in range of year with particular size in particular state(s)?
+4. Which state is most affected by wildfires in terms of frequency and area consumed? 
+5. What are the most common causes of wildfires, both per state and across the country? 
+6. What are the top and bottom states in terms of fast and efficient containment of wildfires?
+7. Are there any mitigating or aggravating factors that are contributing to the result? 
+8. What factors might lead to faster containment of wildfires? 
 
-We are planning to have 6 plots and 2 filters and some labels to show count.
+We are planning to have 8 plots, 2 count labels and 3 filters.
 
 ##### Map Plot:
 
 The map plot will visually represent the geographic distribution of wildfires across USA states. It will utilize geospatial data to display each state's area affected by wildfires, with color gradients indicating varying levels of impact.
 
+##### Count Label:
+
+For simplicity and ease of Interpretation, count labels are used to show cumulative figure without letting the user to calculate on their own. This is used to show total number of wildfire incidents and total areas affected by wildfire.
 
 ##### Line chart:
 This will illustrate the trend of wildfire incidents and the total area affected over a specified time period. This visual representation will enable viewers to track changes in both the frequency of wildfires and the extent of their impact over time.
