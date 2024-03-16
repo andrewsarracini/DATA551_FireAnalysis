@@ -56,10 +56,10 @@ def create_altair_chart2(data):
     :return: Returns bar chart
     '''
     title2 = alt.TitleParams(
-        text='Regional Fire Patterns: Proportion of Fires',
+        text='Regional Fire Patterns: Number of Fires',
         color='white', fontSize=16)
     chart2 = alt.Chart(data, title=title2).mark_bar().encode(
-        alt.X('sum(COUNT)', stack='normalize', title='', axis=alt.Axis(labelColor='white')),
+        alt.X('sum(COUNT)', title='', axis=alt.Axis(labelColor='white', format='~s')),
         alt.Y('geographic_areas_desc:O', sort='y', title="", axis=alt.Axis(labelColor='white')),
         alt.Color('CAUSES', title="", scale=color_scale, legend=alt.Legend(orient='none',
             legendX=90, legendY=-20,
@@ -94,8 +94,8 @@ def create_altair_chart3(data):
                 color='white', fontSize=16)
     chart3_1 = alt.Chart(data, title=title3).mark_line().encode(
     alt.X('MONTH:O', title=None, sort=sort_order, axis=alt.Axis(labelAngle=0, labelColor='white')),
-    alt.Y('average(COUNT)', title=None, axis=alt.Axis(labelColor='white')),
-    alt.Color('CAUSES:O', title= '', scale=color_scale, legend=alt.Legend(orient='none',
+    alt.Y('average(COUNT)', title=None, axis=alt.Axis(labelColor='white', format='~s')),
+    alt.Color('CAUSES:O', title='', scale=color_scale, legend=alt.Legend(orient='none',
     legendX=120, legendY=-20, direction='horizontal', titleAnchor='middle', titleColor='white',
     labelColor='white'))
     ).properties(width=355, height=270
@@ -123,10 +123,10 @@ def create_altair_chart4(data):
     :return: bar chart
     '''
     title4 = alt.TitleParams(
-        text='Regional Fire Patterns: Proportion of Acres Burned',
+        text='Regional Fire Patterns: Total Acres Burned',
         color='white', fontSize=16)
     chart4 = alt.Chart(data, title=title4).mark_bar().encode(
-        alt.X('sum(SUM)', stack='normalize', title='', axis=alt.Axis(labelColor='white')),
+        alt.X('sum(SUM)', title='', axis=alt.Axis(labelColor='white', format='~s')),
         alt.Y('geographic_areas_desc:O', sort='y', title="", axis=alt.Axis(labelColor='white')),
         alt.Color('CAUSES', title="", scale=color_scale, legend=alt.Legend(orient='none',
             legendX=90, legendY=-20,
@@ -244,7 +244,7 @@ layout = html.Div([
             html.Br(),
             html.Br(),
             dvc.Vega(
-                id="altair-chart-3",
+                id="altair-chart-2",
                 opt={"renderer": "svg", "actions": False},
                 spec=create_altair_chart2(causes_grouped),
                 className="altair-chart-2"
@@ -254,7 +254,7 @@ layout = html.Div([
         dbc.Col([
             html.Br(),
             dvc.Vega(
-                id="altair-chart-2",
+                id="altair-chart-3",
                 opt={"renderer": "svg", "actions": False},
                 spec=create_altair_chart3(grouped_df),
                 className="altair-chart-3"
@@ -322,4 +322,3 @@ def update_altair_chart(year_range, selected_states, selected_sizes):
     updated_chart4 = create_altair_chart4(dff4)
     slider_output = dcc.Markdown(f'Selected years: {year_range[0]} - {year_range[1]}')
     return slider_output, updated_chart1, updated_chart2, updated_chart3, updated_chart4
-
