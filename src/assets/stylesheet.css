@@ -155,6 +155,17 @@ background-color: #151515
 }
 
 
+
+.paragraph-text {
+    font-family: "Arial", sans-serif;
+    text-align: left;
+    font-size: 10px;
+    color: white;
+    margin-left: 17%;
+    margin-bottom: 1%;
+    background-color':'black';
+}
+
 .altair-chart-1 {
     height: 45%;
     width: 50%;
@@ -165,30 +176,20 @@ background-color: #151515
 .altair-chart-2 {
     height: 45%;
     width: 50%;
-    margin-left: 23%;
+    margin-left: 20%;
     margin-top: 2%;
 }
 
 .altair-chart-3 {
     height: 45%;
     width: 50%;
-    margin-left: -20%;
+    margin-left: -30%;
     margin-top: 2%;
 }
 
 .altair-chart-4 {
     height: 45%;
     width: 50%;
-    margin-left: -20%;
+    margin-left: -32%;
     margin-top: 2%;
-}
-
-.paragraph-text {
-    font-family: "Arial", sans-serif;
-    text-align: left;
-    font-size: 10px;
-    color: white;
-    margin-left: 17%;
-    margin-bottom: 1%;
-    background-color':'black';
 }
