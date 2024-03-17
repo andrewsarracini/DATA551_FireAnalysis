@@ -43,6 +43,5 @@ This chart will depict the intensity of wildfires in terms of the area affected 
 ![Image](dashboard_sketch.png)
 
 ##### Final Dashboard Screenshots
-- Final Screenshots of our Dashboard
 ![Image](FireAnalysis_Page1.png) 
 ![Image](FireAnalysis_Page2.png) 
