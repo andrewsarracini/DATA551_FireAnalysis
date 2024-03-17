@@ -7,13 +7,15 @@ import plotly.express as px
 '''
 Helps to register the page
 '''
-dash.register_page(__name__, path='/', name="Overview on WildFire")
+dash.register_page(__name__, path='/', name="WildFire Overview")
 
 '''
 Helps to get the data. 
 Then, filters and groups the data according to the requirement 
 '''
-df = pd.read_csv("https://raw.githubusercontent.com/andrewsarracini/DATA551_FireAnalysis/main/data/processed/output.csv", low_memory=False)
+#df = pd.read_csv("https://raw.githubusercontent.com/andrewsarracini/DATA551_FireAnalysis/main/data/processed/output.csv", low_memory=False)
+df = pd.read_csv("https://raw.githubusercontent.com/Naye013/Fires/main/data/processed/output.csv", low_memory=False)
+
 fire_data_grped = df.groupby(['state_descriptions','STATE', 'FIRE_YEAR', 'FIRE_SIZE_CLASS'])['FIRE_SIZE'].agg(['sum', 'count']).reset_index()
 fire_data_grped.rename(columns={'sum': 'FIRE_SIZE', 'count': 'TotalFireCount'}, inplace=True)
 
@@ -213,8 +215,8 @@ def update_graph(year_range, selected_states, selected_sizes):
         legend_title_text="Fire Size Class"
     )
 
-    total_area = round(dff['FIRE_SIZE'].sum(), 3)
-    total_count = dff['TotalFireCount'].sum()
+    total_area = f"{round(dff['FIRE_SIZE'].sum(), 1):,}"
+    total_count = f"{round(dff['TotalFireCount'].sum(), 1):,}"
 
     top10_grouped = dff.groupby('STATE')['FIRE_SIZE'].sum().reset_index()
     top10 = top10_grouped.head(10)
@@ -236,7 +238,7 @@ def update_graph(year_range, selected_states, selected_sizes):
     )
     barPlot.update_layout(
         yaxis=dict(title=None),
-        title="Top10 Wildfire Damage States"
+        title="Top 10 Wildfire Damage States"
     )
     barPlot.update_layout(
         showlegend=False,

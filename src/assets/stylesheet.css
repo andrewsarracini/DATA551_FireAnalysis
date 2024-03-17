@@ -6,6 +6,7 @@ background-color: #000000;
 border-radius: 10px;
 /*box-shadow: 5px 5px 5px grey;*/
 color : white;
+font-family: "Arial";
 }
 
 .heading {
@@ -16,6 +17,7 @@ color : white;
     font-size: 35px;
     text-align: center;
     font-weight: bold;
+    font-family: "Arial";
 }
 
 /* CSS for heading text */
@@ -23,6 +25,7 @@ color : white;
     text-align: center;
     font-weight: bold;
     font-size: 35px;
+    font-family: "Times New Roman";
 }
 
 /* CSS for main content area */
@@ -42,6 +45,7 @@ color : white;
     padding: 10px;
     font-size: 20px;
     color: white;
+    font-family: "Arial";
 }
 
 .count-label {
@@ -50,12 +54,14 @@ color : white;
     font-size: 20px;
     text-align :center;
     color: white;
+    font-family: "Arial";
 }
 
 /* CSS for slider output */
 .slider-output {
     padding: 10px;
     color: white;
+    font-family: "Arial";
 }
 
 /* CSS for sidebar */
@@ -75,6 +81,7 @@ color : white;
     font-weight: bold;
     padding: 10px;
     font-size: 20px;
+    font-family: "Arial";
 }
 
 /* CSS for fire size information */
@@ -82,6 +89,7 @@ color : white;
     max-height: 150px;
     overflow-y: auto;
     color: white;
+    font-family: "Arial";
 }
 
 .shadow-style {
@@ -107,11 +115,13 @@ color : white;
     border-radius: 0.25rem;
 	font-weight: bold;
     transition: background-color 0.3s ease, color 0.3s ease; /* Transition for background color and text color */
+    font-family: "Arial";
 }
 
 .button-link:hover {
     background-color: #6c757d; /* Grey color on hover */
     font-weight: bold; /* Make text bold on hover */
+    font-family: "Arial";
 }
 .mapStyle {
 height: 45%;
