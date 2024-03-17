@@ -2,6 +2,8 @@
 
 Wildfires are a global phenomenon that leads to significant losses not only costly in money but also in terms of vegetation and wildlife. The dashboard aims to provide historical data and insights regarding wildfires in the USA, offering a comprehensive resource for understanding past trends on wildfire behavior.
 
+Link to the dashboard : https://wildfireanalysis.onrender.com 
+
 Our dashboard focuses on answering the below questions:
 1. Are there any spacial cluster in wildfire incidents and how it is related to the size of the fire and Year of occurance?
 2. What is the total number of wildfire incidents in a range of year with particular size in particular state(s)?
